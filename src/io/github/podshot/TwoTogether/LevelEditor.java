@@ -139,6 +139,7 @@ public class LevelEditor extends BasicGame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		in.close();
 		
 	}
 

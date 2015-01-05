@@ -1,6 +1,5 @@
 package io.github.podshot.TwoTogether;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -38,6 +37,10 @@ public class Level {
 	
 	public String getDescription() {
 		return this.description;
+	}
+	
+	public static Level getInstance() {
+		return instance;
 	}
 	
 

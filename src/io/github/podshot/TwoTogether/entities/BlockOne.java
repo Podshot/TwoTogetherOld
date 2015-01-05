@@ -12,7 +12,6 @@ public class BlockOne implements Controllable, Boundable {
 	private static BlockOne instance;
 	private float x;
 	private float y;
-	private boolean aboveCollide;
 
 	public BlockOne() {
 		instance = this;
@@ -118,10 +117,6 @@ public class BlockOne implements Controllable, Boundable {
 		//return 20;
 	}
 
-	public boolean getCollidedAbove() {
-		return this.aboveCollide;
-	}
-
 	public void setY(float boY) {
 		this.y = boY;
 	}
@@ -140,7 +135,9 @@ public class BlockOne implements Controllable, Boundable {
 		toReturn = (bt_bounds.contains(bounds.getMinX(), (bounds.getCenterY()-this.getYBounds()))
 				|| bt_bounds.contains(bounds.getCenterX(), (bounds.getCenterY()-this.getYBounds()))
 				|| bt_bounds.contains(bounds.getMaxX(), (bounds.getCenterY()-this.getYBounds())));
-		//System.out.println("Top: "+test_bool);
+		for (Shape shape : Game.getTerrain()) {
+			toReturn = toReturn || this.bounds().intersects(shape);
+		}
 		return toReturn;
 	}
 	public boolean collidedOnBottom() {
