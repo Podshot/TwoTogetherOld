@@ -10,8 +10,15 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.StateBasedGame;
 
-public class TwoTogether {
+public class TwoTogether extends StateBasedGame {
+
+	public TwoTogether(String name, String args[]) {
+		super(name);
+	}
 
 	private static Map<Integer, Level> levelMap = new HashMap<Integer, Level>();
 
@@ -36,6 +43,7 @@ public class TwoTogether {
 			container.setDisplayMode(600, 450, false);
 			container.start();
 		}
+		new TwoTogether("TwoTogether", args);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -78,6 +86,11 @@ public class TwoTogether {
 
 	public static Level getLevel(int id) {
 		return levelMap.get(id);
+	}
+
+	@Override
+	public void initStatesList(GameContainer container) throws SlickException {
+		//addState(new Menu());
 	}
 
 }
