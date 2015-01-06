@@ -3,9 +3,9 @@ package io.github.podshot.TwoTogether.entities;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
-import io.github.podshot.TwoTogether.Game;
 import io.github.podshot.TwoTogether.api.entities.Boundable;
 import io.github.podshot.TwoTogether.api.entities.Controllable;
+import io.github.podshot.TwoTogether.gamestates.LevelOneState;
 
 public class BlockTwo implements Controllable, Boundable {
 
@@ -57,7 +57,7 @@ public class BlockTwo implements Controllable, Boundable {
 		if (this.bounds().intersects(bo.bounds())) {
 			isIntersecting = true;
 		} else {
-			for (Shape shape : Game.getTerrain()) {
+			for (Shape shape : LevelOneState.getTerrain()) {
 				//Rectangle rect = (Rectangle) shape;
 				isIntersecting = isIntersecting || this.bounds().intersects(shape);
 			}
@@ -132,7 +132,7 @@ public class BlockTwo implements Controllable, Boundable {
 		toReturn = (bt_bounds.contains(bounds.getMinX(), (bounds.getCenterY()-((this.getYBounds()/2)+1)))
 				|| bt_bounds.contains(bounds.getCenterX(), (bounds.getCenterY()-((this.getYBounds()/2)+1)))
 				|| bt_bounds.contains(bounds.getMaxX(), (bounds.getCenterY()-((this.getYBounds()/2)+1))));
-		for (Shape shape : Game.getTerrain()) {
+		for (Shape shape : LevelOneState.getTerrain()) {
 			toReturn = toReturn || this.bounds().intersects(shape);
 		}
 		return toReturn;

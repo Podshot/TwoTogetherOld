@@ -1,4 +1,4 @@
-package io.github.podshot.TwoTogether;
+package io.github.podshot.TwoTogether.gamestates;
 
 import java.awt.Font;
 import java.util.ArrayList;
@@ -6,6 +6,8 @@ import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 
+import io.github.podshot.TwoTogether.Level;
+import io.github.podshot.TwoTogether.TwoTogether;
 import io.github.podshot.TwoTogether.entities.BlockOne;
 import io.github.podshot.TwoTogether.entities.BlockTwo;
 
@@ -31,7 +33,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tiled.TiledMap;
 
 @SuppressWarnings("unused")
-public class Game extends BasicGameState {
+public class LevelOneState extends BasicGameState {
 
 	private AppGameContainer app;
 	private Input input;

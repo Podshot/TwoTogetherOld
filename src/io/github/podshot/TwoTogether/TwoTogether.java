@@ -2,6 +2,7 @@ package io.github.podshot.TwoTogether;
 
 import io.github.podshot.TwoTogether.entities.BlockOne;
 import io.github.podshot.TwoTogether.entities.BlockTwo;
+import io.github.podshot.TwoTogether.gamestates.LevelOneState;
 import io.github.podshot.TwoTogether.gamestates.MenuState;
 
 import java.io.FileWriter;
@@ -20,7 +21,7 @@ public class TwoTogether extends StateBasedGame {
 	public TwoTogether(String name, String args[]) {
 		super(name);
 		addState(new MenuState());
-		addState(new Game());
+		addState(new LevelOneState());
 		this.enterState(0);
 	}
 
