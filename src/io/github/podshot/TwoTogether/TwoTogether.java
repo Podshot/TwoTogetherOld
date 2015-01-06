@@ -2,6 +2,7 @@ package io.github.podshot.TwoTogether;
 
 import io.github.podshot.TwoTogether.entities.BlockOne;
 import io.github.podshot.TwoTogether.entities.BlockTwo;
+import io.github.podshot.TwoTogether.gamestates.MenuState;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,6 +19,9 @@ public class TwoTogether extends StateBasedGame {
 
 	public TwoTogether(String name, String args[]) {
 		super(name);
+		addState(new MenuState());
+		addState(new Game());
+		this.enterState(0);
 	}
 
 	private static Map<Integer, Level> levelMap = new HashMap<Integer, Level>();
@@ -33,6 +37,9 @@ public class TwoTogether extends StateBasedGame {
 				template = args[i+1];
 			}
 		}
+		// TODO: Remove this
+		addLevel(1, new Level(1));
+		/*
 		if (!doLevelEditor) {
 			addLevel(1, new Level(1));
 			AppGameContainer container = new AppGameContainer(new Game("Two Together"));
@@ -43,7 +50,10 @@ public class TwoTogether extends StateBasedGame {
 			container.setDisplayMode(600, 450, false);
 			container.start();
 		}
-		new TwoTogether("TwoTogether", args);
+		*/
+		AppGameContainer container = new AppGameContainer(new TwoTogether("TwoTogether", args));
+		container.setDisplayMode(600, 450, false);
+		container.start();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -90,7 +100,8 @@ public class TwoTogether extends StateBasedGame {
 
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
-		//addState(new Menu());
+		//addState(new MenuState());
+		//addState(new Game());
 	}
 
 }

@@ -26,10 +26,12 @@ import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.opengl.ImageIOImageData;
+import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tiled.TiledMap;
 
 @SuppressWarnings("unused")
-public class Game extends BasicGame {
+public class Game extends BasicGameState {
 
 	private AppGameContainer app;
 	private Input input;
@@ -59,12 +61,8 @@ public class Game extends BasicGame {
 	private Level level;
 	private static ArrayList<Shape> terrain_normal = new ArrayList<Shape>();
 
-	public Game(String title) {
-		super(title);
-	}
-
 	@Override
-	public void render(GameContainer container, Graphics g) throws SlickException {
+	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 		//this.drawBounds(g);
 		g.drawString(this.level.getDescription(), 110, 50);
 		g.setBackground(new Color(204, 204, 204));
@@ -90,7 +88,7 @@ public class Game extends BasicGame {
 	}
 
 	@Override
-	public void init(GameContainer container) throws SlickException {
+	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		if (container instanceof AppGameContainer) {
 			app = (AppGameContainer) container;
 		}
@@ -115,7 +113,7 @@ public class Game extends BasicGame {
 	}
 
 	@Override
-	public void update(GameContainer container, int delta) throws SlickException {
+	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
 		// Start controlling the small block
 		if (container.getInput().isKeyDown(Input.KEY_LEFT)) {
 			bo.move_left(delta);
@@ -297,11 +295,18 @@ public class Game extends BasicGame {
 		return terrain_normal;
 	}
 
+	@Deprecated
 	private enum Movement {
 		LEFT, RIGHT, DOWN, UP;
 	}
 
+	@Deprecated
 	private enum Entity {
 		BLOCK_1, BLOCK_2;
+	}
+	
+	@Override
+	public int getID() {
+		return 1;
 	}
 }
