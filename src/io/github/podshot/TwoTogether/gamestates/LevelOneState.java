@@ -1,18 +1,22 @@
 package io.github.podshot.TwoTogether.gamestates;
 
 import java.awt.Font;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 
-import io.github.podshot.TwoTogether.Level;
 import io.github.podshot.TwoTogether.TwoTogether;
 import io.github.podshot.TwoTogether.entities.BlockOne;
 import io.github.podshot.TwoTogether.entities.BlockTwo;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
@@ -59,14 +63,15 @@ public class LevelOneState extends BasicGameState {
 	private float b2verticalSpeed = 0.0f;
 	private boolean b1fix;
 	private boolean b2fix;
+	private String description;
 	
-	private Level level;
+	//private Level level;
 	private static ArrayList<Shape> terrain_normal = new ArrayList<Shape>();
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 		//this.drawBounds(g);
-		g.drawString(this.level.getDescription(), 110, 50);
+		g.drawString(description, 110, 50);
 		g.setBackground(new Color(204, 204, 204));
 		g.setColor(Color.red);
 		g.fillRect(bo.getX(), bo.getY(), bo.getXBounds(), bo.getYBounds());
@@ -95,12 +100,19 @@ public class LevelOneState extends BasicGameState {
 			app = (AppGameContainer) container;
 		}
 
+		JSONObject level = null;
+		try {
+			level = (JSONObject) new JSONParser().parse(new FileReader("level_1.json"));
+		} catch (IOException | ParseException e) {
+			e.printStackTrace();
+		}
+		JSONArray terrainJSON = (JSONArray) level.get("Shapes");
+		this.description = (String) level.get("Description");
 		input = container.getInput();
 		bo = BlockOne.getInstance();
 		bt = BlockTwo.getInstance();
-		this.level = TwoTogether.getLevel(1);
 		@SuppressWarnings("unchecked")
-		Iterator<JSONObject> iter = this.level.getTerrain().iterator();
+		Iterator<JSONObject> iter = terrainJSON.iterator();
 		while (iter.hasNext()) {
 			JSONObject shape_json = iter.next();
 			System.out.println(shape_json.toJSONString());
