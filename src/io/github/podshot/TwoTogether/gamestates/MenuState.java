@@ -13,10 +13,14 @@ public class MenuState extends BasicGameState {
 
 	private Rectangle playGameBTN = new Rectangle(240, 95, 100, 30);
 	private Rectangle quitBTN = new Rectangle(240, 150, 100, 30);
+	private Color bgcolor;
+	private Color btncolor;
 
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		container.setShowFPS(false);
+		bgcolor = new Color(204, 204, 204);
+		btncolor = new Color(127, 127, 127);
 		//playGameBTN = new Rectangle(240, 95, 100, 30);
 		//quitBTN = new Rectangle(240, 150, 100, 30);
 
@@ -24,12 +28,14 @@ public class MenuState extends BasicGameState {
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-		g.setColor(Color.gray);
+		g.setBackground(bgcolor);
+		g.setColor(btncolor);
 		g.fill(playGameBTN);
 		g.fill(quitBTN);
 		
-		g.setColor(Color.white);
+		g.setColor(btncolor);
 		g.drawString("Two Together", 235, 50);
+		g.setColor(Color.white);
 		g.drawString("Play Game", 250, 100);
 		//g.drawString("2. Select a Level", 900, 120);
 		g.drawString("Quit", 270, 155);
