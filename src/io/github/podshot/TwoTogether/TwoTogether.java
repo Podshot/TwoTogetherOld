@@ -7,8 +7,6 @@ import io.github.podshot.TwoTogether.gamestates.MenuState;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.json.simple.JSONObject;
 import org.newdawn.slick.AppGameContainer;
@@ -25,8 +23,6 @@ public class TwoTogether extends StateBasedGame {
 		this.enterState(0);
 	}
 
-	private static Map<Integer, Level> levelMap = new HashMap<Integer, Level>();
-
 	public static void main(String[] args) throws Exception {
 		boolean doLevelEditor = false;
 		String template = null;
@@ -38,8 +34,6 @@ public class TwoTogether extends StateBasedGame {
 				template = args[i+1];
 			}
 		}
-		// TODO: Remove this
-		addLevel(1, new Level(1));
 		/*
 		if (!doLevelEditor) {
 			addLevel(1, new Level(1));
@@ -87,16 +81,6 @@ public class TwoTogether extends StateBasedGame {
 			e.printStackTrace();
 		}
 
-	}
-
-	public static void addLevel(int id, Level lvl) {
-		if (!(levelMap.containsKey(id))) {
-			levelMap.put(id, lvl);
-		}
-	}
-
-	public static Level getLevel(int id) {
-		return levelMap.get(id);
 	}
 
 	@Override

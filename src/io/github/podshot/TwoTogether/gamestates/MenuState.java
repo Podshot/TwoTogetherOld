@@ -15,6 +15,7 @@ public class MenuState extends BasicGameState {
 	private Rectangle quitBTN = new Rectangle(240, 150, 100, 30);
 	private Color bgcolor;
 	private Color btncolor;
+	private boolean[] mousedOver = new boolean[2];
 
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
@@ -36,16 +37,28 @@ public class MenuState extends BasicGameState {
 		g.setColor(btncolor);
 		g.drawString("Two Together", 235, 50);
 		g.setColor(Color.white);
+		if (mousedOver[0]) {
+			g.setColor(Color.lightGray);
+		}
 		g.drawString("Play Game", 250, 100);
-		//g.drawString("2. Select a Level", 900, 120);
+		if (mousedOver[0]) {
+			g.setColor(Color.white);
+		}
+		//g.drawString("Select a Level", 900, 120);
+		if (mousedOver[1]) {
+			g.setColor(Color.lightGray);
+		}
 		g.drawString("Quit", 270, 155);
+		if (mousedOver[1]) {
+			g.setColor(Color.white);
+		}
 
 	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-		if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
-			Input input = container.getInput();
+		Input input = container.getInput();
+		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
 			if (playGameBTN.contains(input.getMouseX(), input.getMouseY())) {
 				System.out.println("Should play game");
 				game.enterState(1);
@@ -53,6 +66,16 @@ public class MenuState extends BasicGameState {
 				System.out.println("Quitting...");
 				container.exit();
 			}
+		}
+		if (playGameBTN.contains(input.getMouseX(), input.getMouseY()) && !input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+			mousedOver[0] = true;
+		} else {
+			mousedOver[0] = false;
+		}
+		if (quitBTN.contains(input.getMouseX(), input.getMouseY()) && !input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+			mousedOver[1] = true;
+		} else {
+			mousedOver[1] = false;
 		}
 
 	}
