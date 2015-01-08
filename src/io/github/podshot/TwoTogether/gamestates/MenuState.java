@@ -22,6 +22,8 @@ public class MenuState extends BasicGameState {
 	 * 1 | Quit
 	 * 2 | Credits
 	 */
+	private boolean[] easterEgg1 = new boolean[6];
+	private static boolean easterEggActivated = false;
 
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
@@ -40,7 +42,7 @@ public class MenuState extends BasicGameState {
 		g.fill(playGameBTN);
 		g.fill(creditsBTN);
 		g.fill(quitBTN);
-		
+
 		g.setColor(btncolor);
 		g.drawString("Two Together", 235, 50);
 		g.setColor(Color.white);
@@ -59,7 +61,7 @@ public class MenuState extends BasicGameState {
 		if (mousedOver[1]) {
 			g.setColor(Color.white);
 		}
-		
+
 		if (mousedOver[2]) {
 			g.setColor(Color.lightGray);
 		}
@@ -100,10 +102,15 @@ public class MenuState extends BasicGameState {
 		} else {
 			mousedOver[2] = false;
 		}
-		
+
 		// Start easter egg code
+		
 		// End easter egg code
 
+	}
+	
+	public static boolean isEasterEggActivated() {
+		return easterEggActivated;
 	}
 
 	@Override
