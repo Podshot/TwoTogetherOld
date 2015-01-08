@@ -2,6 +2,7 @@ package io.github.podshot.TwoTogether;
 
 import io.github.podshot.TwoTogether.entities.BlockOne;
 import io.github.podshot.TwoTogether.entities.BlockTwo;
+import io.github.podshot.TwoTogether.gamestates.CreditsState;
 import io.github.podshot.TwoTogether.gamestates.LevelOneState;
 import io.github.podshot.TwoTogether.gamestates.MenuState;
 
@@ -20,6 +21,7 @@ public class TwoTogether extends StateBasedGame {
 		super(name);
 		addState(new MenuState());
 		addState(new LevelOneState());
+		addState(new CreditsState());
 		this.enterState(0);
 	}
 

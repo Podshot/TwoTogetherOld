@@ -12,10 +12,16 @@ import org.newdawn.slick.state.StateBasedGame;
 public class MenuState extends BasicGameState {
 
 	private Rectangle playGameBTN = new Rectangle(240, 95, 100, 30);
-	private Rectangle quitBTN = new Rectangle(240, 150, 100, 30);
+	private Rectangle quitBTN = new Rectangle(240, 180, 100, 30);
+	private Rectangle creditsBTN = new Rectangle(240, 137, 100, 30);
 	private Color bgcolor;
 	private Color btncolor;
-	private boolean[] mousedOver = new boolean[2];
+	private boolean[] mousedOver = new boolean[3];
+	/* mousedover states entries | Corresponding button
+	 * 0 | Play Game
+	 * 1 | Quit
+	 * 2 | Credits
+	 */
 
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
@@ -32,6 +38,7 @@ public class MenuState extends BasicGameState {
 		g.setBackground(bgcolor);
 		g.setColor(btncolor);
 		g.fill(playGameBTN);
+		g.fill(creditsBTN);
 		g.fill(quitBTN);
 		
 		g.setColor(btncolor);
@@ -48,8 +55,16 @@ public class MenuState extends BasicGameState {
 		if (mousedOver[1]) {
 			g.setColor(Color.lightGray);
 		}
-		g.drawString("Quit", 270, 155);
+		g.drawString("Quit", 270, 185);
 		if (mousedOver[1]) {
+			g.setColor(Color.white);
+		}
+		
+		if (mousedOver[2]) {
+			g.setColor(Color.lightGray);
+		}
+		g.drawString("Credits", 258, 142);
+		if (mousedOver[2]) {
 			g.setColor(Color.white);
 		}
 
@@ -65,6 +80,9 @@ public class MenuState extends BasicGameState {
 			} else if (quitBTN.contains(input.getMouseX(), input.getMouseY())) {
 				System.out.println("Quitting...");
 				container.exit();
+			} else if (creditsBTN.contains(input.getMouseX(), input.getMouseY())) {
+				System.out.println("Should show credits");
+				game.enterState(-1);
 			}
 		}
 		if (playGameBTN.contains(input.getMouseX(), input.getMouseY()) && !input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
@@ -77,6 +95,14 @@ public class MenuState extends BasicGameState {
 		} else {
 			mousedOver[1] = false;
 		}
+		if (creditsBTN.contains(input.getMouseX(), input.getMouseY()) && !input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+			mousedOver[2] = true;
+		} else {
+			mousedOver[2] = false;
+		}
+		
+		// Start easter egg code
+		// End easter egg code
 
 	}
 
