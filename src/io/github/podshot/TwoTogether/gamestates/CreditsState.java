@@ -42,6 +42,10 @@ public class CreditsState extends BasicGameState {
 			g.setColor(Color.white);
 		}
 		
+		if (MenuState.isEasterEggActivated()) {
+			
+		}
+		
 	}
 
 	@Override

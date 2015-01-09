@@ -23,6 +23,7 @@ public class MenuState extends BasicGameState {
 	 * 2 | Credits
 	 */
 	private boolean[] easterEgg1 = new boolean[6];
+	private String easterEggHintMSG;
 	private static boolean easterEggActivated = false;
 
 	@Override
@@ -43,7 +44,9 @@ public class MenuState extends BasicGameState {
 		g.fill(creditsBTN);
 		g.fill(quitBTN);
 
-		g.setColor(btncolor);
+		if (easterEggActivated) {
+			g.drawString(easterEggHintMSG , 200, 250);
+		}
 		g.drawString("Two Together", 235, 50);
 		g.setColor(Color.white);
 		if (mousedOver[0]) {
