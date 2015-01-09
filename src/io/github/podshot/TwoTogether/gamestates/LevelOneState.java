@@ -1,42 +1,30 @@
 package io.github.podshot.TwoTogether.gamestates;
 
-import java.awt.Font;
-import java.io.FileNotFoundException;
+import io.github.podshot.TwoTogether.TwoTogether;
+import io.github.podshot.TwoTogether.entities.BlockOne;
+import io.github.podshot.TwoTogether.entities.BlockTwo;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import javax.imageio.ImageIO;
-
-import io.github.podshot.TwoTogether.TwoTogether;
-import io.github.podshot.TwoTogether.entities.BlockOne;
-import io.github.podshot.TwoTogether.entities.BlockTwo;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.ImageBuffer;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.font.effects.ColorEffect;
-import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
-import org.newdawn.slick.opengl.ImageIOImageData;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.tiled.TiledMap;
 
-@SuppressWarnings("unused")
+//@SuppressWarnings("unused")
 public class LevelOneState extends BasicGameState {
 
 	private AppGameContainer app;
@@ -45,27 +33,18 @@ public class LevelOneState extends BasicGameState {
 	private BlockTwo bt;
 
 	// Small Box fields
-	private float b1_x;
-	private float b1_y;
-	private float b1_bounds_x = 20;
-	private float b1_bounds_y = 20;
 	private boolean b1jumping;
 	private float b1verticalSpeed = 0.0f;
 	private boolean b1falling;
+	private boolean b1fix;
 
 	// Large Box fields
-	private float b2_x;
-	private float b2_y;
-	private float b2_bounds_x = 20;
-	private float b2_bounds_y = 40;
 	private boolean b2falling = false;
 	private boolean b2jumping;
 	private float b2verticalSpeed = 0.0f;
-	private boolean b1fix;
 	private boolean b2fix;
 	private String description;
 	
-	//private Level level;
 	private static ArrayList<Shape> terrain_normal = new ArrayList<Shape>();
 
 	@Override
@@ -84,14 +63,6 @@ public class LevelOneState extends BasicGameState {
 			g.setColor(Color.gray);
 			g.fill(rect);
 		}
-	}
-
-	@Deprecated
-	private void drawBounds(Graphics g) {
-		g.drawLine(0, 0, 800, 0);
-		g.drawLine(0, 0, 0, 600);
-		g.drawLine(0, 600, 800, 600);
-		g.drawLine(0, 600, 800, 600);
 	}
 
 	@Override
@@ -119,7 +90,7 @@ public class LevelOneState extends BasicGameState {
 			Rectangle rectangle = new Rectangle(Float.parseFloat(shape_json.get("Min X").toString()), Float.parseFloat(shape_json.get("Min Y").toString()), Math.abs(Float.parseFloat(shape_json.get("Width").toString())), Math.abs(Float.parseFloat(shape_json.get("Height").toString())));
 			terrain_normal.add(rectangle);
 		}
-
+		container.setShowFPS(true);
 		//Music backroundMusic = new Music("io/github/podshot/TwoTogether/sound/backround_music.ogg");
 		//backroundMusic.loop(1f, 0.30f);
 		//this.app.setShowFPS(false);
@@ -262,61 +233,9 @@ public class LevelOneState extends BasicGameState {
 		}
 		//System.out.println(container.getInput().getMouseX()+":"+container.getInput().getMouseY());
 	}
-
-	@Deprecated
-	private Shape b1_bounds() {
-		return new Rectangle(this.getB1_x(), this.getB1_y(), this.b1_bounds_x, this.b1_bounds_y);
-	}
-
-	@Deprecated
-	private Shape b2_bounds() {
-		return new Rectangle(this.getB2_x(), this.getB2_y(), this.b2_bounds_x, this.b2_bounds_y);
-	}
-
-	public float getB1_x() {
-		return b1_x;
-	}
-
-	public void setB1_x(float b1_x) {
-		this.b1_x = b1_x;
-	}
-
-	public float getB1_y() {
-		return b1_y;
-	}
-
-	public void setB1_y(float b1_y) {
-		this.b1_y = b1_y;
-	}
-
-	public float getB2_x() {
-		return b2_x;
-	}
-
-	public void setB2_x(float b2_x) {
-		this.b2_x = b2_x;
-	}
-
-	public float getB2_y() {
-		return b2_y;
-	}
-
-	public void setB2_y(float b2_y) {
-		this.b2_y = b2_y;
-	}
 	
 	public static ArrayList<Shape> getTerrain() {
 		return terrain_normal;
-	}
-
-	@Deprecated
-	private enum Movement {
-		LEFT, RIGHT, DOWN, UP;
-	}
-
-	@Deprecated
-	private enum Entity {
-		BLOCK_1, BLOCK_2;
 	}
 	
 	@Override
