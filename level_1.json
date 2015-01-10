@@ -1,0 +1,45 @@
+{
+	"Description": "There's nothing wrong in asking for help",
+	"Shapes": [{
+		"Min X": 0.0,
+		"Height": 74.0,
+		"Min Y": 376.0,
+		"Width": 30.0
+	},
+	{
+		"Min X": 30.0,
+		"Height": 34.0,
+		"Min Y": 416.0,
+		"Width": 570.0
+	},
+	{
+		"Min X": 590.0,
+		"Height": 22.0,
+		"Min Y": 394.0,
+		"Width": 10.0
+	},
+	{
+		"Min X": 560.0,
+		"Height": 10.0,
+		"Min Y": 394.0,
+		"Width": 30.0
+	},
+	{
+		"Min X": 302.0,
+		"Height": 20.0,
+		"Min Y": 396.0,
+		"Width": 13.0
+	},
+	{
+		"Min X": 237.0,
+		"Height": 10.0,
+		"Min Y": 406.0,
+		"Width": 11.0
+	},
+	{
+		"Min X": 50.0,
+		"Height": 21.0,
+		"Min Y": 356.0,
+		"Width": 30.0
+	}]
+}

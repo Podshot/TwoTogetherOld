@@ -19,15 +19,18 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
+@Deprecated
 public class LevelEditor extends BasicGame {
 
 	private Image template;
 	private AppGameContainer app;
 	private String template_string;
-	private Map<String, Shape> terrain =  new HashMap<String, Shape>();
+	private Map<String, Shape> terrain = new HashMap<String, Shape>();
+	private Map<String, ShapeType> data = new HashMap<String, ShapeType>();
 	private boolean isDrawing;
 	private int startPoint_x;
 	private int startPoint_y;
+	private ShapeType drawingType;
 
 	public LevelEditor(String title, String template) {
 		super(title);
@@ -46,7 +49,11 @@ public class LevelEditor extends BasicGame {
 			if (this.terrain.containsKey(id)) {
 				this.terrain.remove(id);
 			}
+			if (this.data.containsKey(id)) {
+				this.data.remove(id);
+			}
 			this.terrain.put(id, new Rectangle(this.startPoint_x, this.startPoint_y, container.getInput().getMouseX()-this.startPoint_x, container.getInput().getMouseY()-this.startPoint_y));
+			this.data.put(id, this.drawingType);
 		}
 		if (!(this.terrain.isEmpty())) {
 			for (String key : this.terrain.keySet()) {
@@ -63,6 +70,7 @@ public class LevelEditor extends BasicGame {
 		if (this.template != null) {
 			this.template = new Image(this.template_string);
 		}
+		this.drawingType = ShapeType.STATIC;
 
 	}
 
@@ -75,6 +83,15 @@ public class LevelEditor extends BasicGame {
 		}
 		if (container.getInput().isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON) && this.isDrawing) {
 			this.isDrawing = false;
+		}
+		if (container.getInput().isKeyPressed(Input.KEY_1)) {
+			this.drawingType = ShapeType.STATIC;
+		}
+		if (container.getInput().isKeyPressed(Input.KEY_2)) {
+			this.drawingType = ShapeType.OBJECTIVE_BLOCK_ONE;
+		}
+		if (container.getInput().isKeyPressed(Input.KEY_3)) {
+			this.drawingType = ShapeType.OBJECTIVE_BLOCK_TWO;
 		}
 
 		if (container.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
@@ -110,6 +127,10 @@ public class LevelEditor extends BasicGame {
 		}
 		in.close();
 
+	}
+	
+	public enum ShapeType {
+		STATIC, OBJECTIVE_BLOCK_ONE, OBJECTIVE_BLOCK_TWO;
 	}
 
 }

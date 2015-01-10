@@ -26,28 +26,6 @@ public class TwoTogether extends StateBasedGame {
 	}
 
 	public static void main(String[] args) throws Exception {
-		boolean doLevelEditor = false;
-		String template = null;
-		for (int i=0;i<args.length;i++) {
-			if (args[i].equalsIgnoreCase("-leveleditor")) {
-				doLevelEditor = true;
-			}
-			if (args[i].equalsIgnoreCase("-template")) {
-				template = args[i+1];
-			}
-		}
-		/*
-		if (!doLevelEditor) {
-			addLevel(1, new Level(1));
-			AppGameContainer container = new AppGameContainer(new Game("Two Together"));
-			container.setDisplayMode(600, 480, false);
-			container.start();
-		} else {
-			AppGameContainer container = new AppGameContainer(new LevelEditor("Two Together - LevelEditor", template));
-			container.setDisplayMode(600, 450, false);
-			container.start();
-		}
-		*/
 		AppGameContainer container = new AppGameContainer(new TwoTogether("TwoTogether", args));
 		container.setDisplayMode(600, 450, false);
 		container.start();

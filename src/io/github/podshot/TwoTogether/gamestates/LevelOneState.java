@@ -28,7 +28,6 @@ import org.newdawn.slick.state.StateBasedGame;
 public class LevelOneState extends BasicGameState {
 
 	private AppGameContainer app;
-	private Input input;
 	private BlockOne bo;
 	private BlockTwo bt;
 
@@ -79,7 +78,6 @@ public class LevelOneState extends BasicGameState {
 		}
 		JSONArray terrainJSON = (JSONArray) level.get("Shapes");
 		this.description = (String) level.get("Description");
-		input = container.getInput();
 		bo = BlockOne.getInstance();
 		bt = BlockTwo.getInstance();
 		@SuppressWarnings("unchecked")
