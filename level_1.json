@@ -4,42 +4,63 @@
 		"Min X": 0.0,
 		"Height": 74.0,
 		"Min Y": 376.0,
-		"Width": 30.0
+		"Width": 30.0,
+		"Type": "STATIC"
 	},
 	{
 		"Min X": 30.0,
 		"Height": 34.0,
 		"Min Y": 416.0,
-		"Width": 570.0
+		"Width": 570.0,
+		"Type": "STATIC"
 	},
 	{
 		"Min X": 590.0,
 		"Height": 22.0,
 		"Min Y": 394.0,
-		"Width": 10.0
+		"Width": 10.0,
+		"Type": "STATIC"
 	},
 	{
 		"Min X": 560.0,
 		"Height": 10.0,
 		"Min Y": 394.0,
-		"Width": 30.0
+		"Width": 30.0,
+		"Type": "STATIC"
 	},
 	{
 		"Min X": 302.0,
 		"Height": 20.0,
 		"Min Y": 396.0,
-		"Width": 13.0
+		"Width": 13.0,
+		"Type": "STATIC"
 	},
 	{
 		"Min X": 237.0,
 		"Height": 10.0,
 		"Min Y": 406.0,
-		"Width": 11.0
+		"Width": 11.0,
+		"Type": "STATIC"
 	},
 	{
 		"Min X": 50.0,
 		"Height": 21.0,
 		"Min Y": 356.0,
-		"Width": 30.0
+		"Width": 30.0,
+		"Type": "STATIC"
+	},
+	{
+		"Min X": 50.0,
+		"Height": 39.0,
+		"Min Y": 377.0,
+		"Width": 30.0,
+		"Type": "BACKGROUND"
+	},
+	{
+		"Min X": 560.0,
+		"Height": 12.0,
+		"Min Y": 404.0,
+		"Width": 30.0,
+		"Type": "BACKGROUND"
 	}]
 }
