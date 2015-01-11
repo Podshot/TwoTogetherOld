@@ -20,13 +20,11 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 //@SuppressWarnings("unused")
-public class LevelOneState extends BasicGameState{
+public class LevelOneState extends BasicGameState {
 
 	// Small Box fields
 	private boolean b1jumping;
 	private float b1verticalSpeed = 0.0f;
-	private boolean b1falling;
-	private boolean b1fix;
 	private float blockOneX;
 	private float blockOneY;
 
@@ -34,7 +32,6 @@ public class LevelOneState extends BasicGameState{
 	private boolean b2falling = false;
 	private boolean b2jumping;
 	private float b2verticalSpeed = 0.0f;
-	private boolean b2fix;
 	private float blockTwoX;
 	private float blockTwoY;
 	
@@ -45,7 +42,6 @@ public class LevelOneState extends BasicGameState{
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-		//this.drawBounds(g);
 		g.setColor(bgcolor);
 		for (Shape rect : terrain_background) {
 			g.fill(rect);
@@ -54,7 +50,6 @@ public class LevelOneState extends BasicGameState{
 		g.drawString(description, 110, 50);
 		g.setBackground(new Color(204, 204, 204));
 		g.setColor(Color.red);
-		//g.fillRect(bo.getX(), bo.getY(), bo.getXBounds(), bo.getYBounds());
 		g.fillRect(this.blockOneX, this.blockOneY, 10, 10);
 		g.setColor(Color.cyan);
 		g.fillRect(this.blockTwoX, this.blockTwoY, 10, 20);
@@ -103,11 +98,9 @@ public class LevelOneState extends BasicGameState{
 	public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
 		// Start controlling the small block
 		if (container.getInput().isKeyDown(Input.KEY_LEFT)) {
-			//bo.move_left(delta);
 			this.blockOneMoveLeft(delta);
 		}
 		if (container.getInput().isKeyDown(Input.KEY_RIGHT)) {
-			//bo.move_right(delta);
 			this.blockOneMoveRight(delta);
 		}
 		if (container.getInput().isKeyDown(Input.KEY_UP) && !b1jumping && !this.blockOneCollidedOnTop()) {
@@ -137,8 +130,7 @@ public class LevelOneState extends BasicGameState{
 				b1verticalSpeed = 0;
 			}
 			if (b1jumping) {
-				b1verticalSpeed += .007f * delta;
-				b1fix = true;
+				b1verticalSpeed += .009f * delta;
 			}
 			float b1speedY = this.blockOneY;
 			b1speedY += b1verticalSpeed;
@@ -147,17 +139,12 @@ public class LevelOneState extends BasicGameState{
 			if (this.blockOneIntersectsSomething()) {
 				b1jumping = false;
 				b1verticalSpeed = 0;
-				//if (580 <= Math.round(bo.getX())){
-				//	bo.setY(bo.getX()+(0.5f*delta));
-				//} else {
-				if (this.blockOneBounds().intersects(this.blockTwoBounds())/* && b1fix*/) {
+				if (this.blockOneBounds().intersects(this.blockTwoBounds())) {
 					this.blockOneY = this.blockOneY-0.9f;
 					System.out.println("Fired when jumped");
-					b1fix = false;
 				} else {
 					this.blockOneY = this.blockOneY-0.9f;
 				}
-				//}
 			}
 		} else if (!b1jumping && b2jumping) {
 
@@ -176,9 +163,6 @@ public class LevelOneState extends BasicGameState{
 			if (this.blockTwoIntersectsSomething()) {
 				b2jumping = false;
 				b2verticalSpeed = 0;
-				//if (560 <= Math.round(this.y)) {
-				//	bt.setY(bt.getY()+(0.5f*delta));
-				//} else {
 				if (this.blockTwoBounds().intersects(this.blockOneBounds())) {
 					this.blockTwoY = this.blockTwoY - 1.0f;
 					System.out.println("Fired when jumped");
@@ -189,15 +173,7 @@ public class LevelOneState extends BasicGameState{
 				//}
 			}
 		} else if (!b1jumping && !b2jumping) {
-			if (this.blockOneCollidedOnBottom() && b1fix) {
-				this.blockOneY = this.blockOneY + (0.5f*delta);
-				System.out.println("Always firing (1)....");
-				b1fix = false;
-				//} else if (bo.collidedOnTop() && b1fix) {
-				//bo.setY(bt.getY()-(0.5f*delta));
-				//System.out.println("Always firing (2)....");
-				//b1fix = false;
-			}
+			
 		} else {
 			b1jumping = false;
 			b2jumping = false;
@@ -218,7 +194,12 @@ public class LevelOneState extends BasicGameState{
 		}
 		// End controlling the big block
 
-		// Gravity implementation
+		if (this.blockOneCollidedOnBottom()) {
+			this.blockOneY -= .5f;
+		}
+		if (this.blockOneCollidedOnTop()) {
+			this.blockOneY += .5f;
+		}
 	}
 
 	public ArrayList<Shape> getTerrain() {
@@ -241,7 +222,7 @@ public class LevelOneState extends BasicGameState{
 			isIntersecting = true;
 		} else {
 			for (Shape shape : this.getTerrain()) {
-				isIntersecting = (isIntersecting || this.blockOneBounds().intersects(shape));
+				isIntersecting = isIntersecting || this.blockOneBounds().intersects(shape);
 			}
 		}
 		return isIntersecting;
@@ -286,6 +267,9 @@ public class LevelOneState extends BasicGameState{
 		toReturn = (bt_bounds.contains(this.blockOneBounds().getMinX(), (this.blockOneBounds().getCenterY()+6))
 				|| bt_bounds.contains(this.blockOneBounds().getCenterX(), (this.blockOneBounds().getCenterY()+6))
 				|| bt_bounds.contains(this.blockOneBounds().getMaxX(), (this.blockOneBounds().getCenterY()+6)));
+		for (Shape rect : this.getTerrain()) {
+			toReturn = toReturn || this.blockOneBounds().intersects(rect);
+		}
 		return toReturn;
 	}
 	// End Block One
@@ -297,10 +281,8 @@ public class LevelOneState extends BasicGameState{
 			isIntersecting = true;
 		} else {
 			for (Shape shape : this.getTerrain()) {
-				//Rectangle rect = (Rectangle) shape;
 				isIntersecting = isIntersecting || this.blockTwoBounds().intersects(shape);
 			}
-			//isIntersecting = true;
 		}
 		return isIntersecting;
 	}
