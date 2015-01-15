@@ -36,6 +36,8 @@ public class LevelOneState extends BasicGameState {
 	private float blockTwoY;
 	
 	// Constants
+	private final float blockOneGravity = 0.0f;
+	private final float blockTwoGravity = 0.0f;
 	
 	private String description;
 	private Color bgcolor;
@@ -154,7 +156,7 @@ public class LevelOneState extends BasicGameState {
 			if (this.blockOneIntersectsSomething()) {
 				b1jumping = false;
 				b1verticalSpeed = -1.1f;
-				b1verticalSpeed = 0;
+				//b1verticalSpeed = 0;
 			}
 			if (b1jumping) {
 				b1verticalSpeed += .009f * delta;
@@ -178,7 +180,7 @@ public class LevelOneState extends BasicGameState {
 			if (this.blockTwoIntersectsSomething()) {
 				b2jumping = false;
 				b2verticalSpeed = -1.1f;
-				b2verticalSpeed = 0;
+				//b2verticalSpeed = 0;
 			}
 			if (b2jumping) {
 				b2verticalSpeed += .007f * delta;
