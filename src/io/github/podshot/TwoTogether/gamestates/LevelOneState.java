@@ -12,7 +12,6 @@ import org.json.simple.parser.ParseException;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
@@ -42,6 +41,9 @@ public class LevelOneState extends BasicGameState {
 	private Color bgcolor;
 	private static ArrayList<Shape> terrain_normal = new ArrayList<Shape>();
 	private static ArrayList<Shape> terrain_background = new ArrayList<Shape>();
+	private static Shape[] terrain_objectives = new Shape[2];
+	
+	private boolean[] objectivesCompleted = new boolean[2];
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
@@ -49,6 +51,19 @@ public class LevelOneState extends BasicGameState {
 		for (Shape rect : terrain_background) {
 			g.fill(rect);
 		}
+		if (objectivesCompleted[0]) {
+			g.setColor(Color.black);
+		}
+		g.fill(terrain_objectives[0]);
+		if (objectivesCompleted[0]) {
+			g.setColor(bgcolor);
+		}
+		
+		if (objectivesCompleted[1]) {
+			g.setColor(Color.black);
+		}
+		g.fill(terrain_objectives[1]);
+
 		g.setColor(Color.gray);
 		g.drawString(description, 110, 50);
 		g.setBackground(new Color(204, 204, 204));
@@ -80,28 +95,30 @@ public class LevelOneState extends BasicGameState {
 		Iterator<JSONObject> iter = terrainJSON.iterator();
 		while (iter.hasNext()) {
 			JSONObject shape_json = iter.next();
-			System.out.println(shape_json.toJSONString());
+			//System.out.println(shape_json.toJSONString());
 			Rectangle rectangle = new Rectangle(Float.parseFloat(shape_json.get("Min X").toString()), Float.parseFloat(shape_json.get("Min Y").toString()), Float.parseFloat(shape_json.get("Width").toString()), Float.parseFloat(shape_json.get("Height").toString()));
 			if (shape_json.get("Type").equals("STATIC")) {
 				terrain_normal.add(rectangle);
 			} else if (shape_json.get("Type").equals("BACKGROUND")) {
 				terrain_background.add(rectangle);
 			} else if (shape_json.get("Type").equals("BLOCK_ONE_OBJECTIVE")) {
-				
+				terrain_objectives[0] = new Rectangle(Float.parseFloat(shape_json.get("Min X").toString()), Float.parseFloat(shape_json.get("Min Y").toString()), Float.parseFloat(shape_json.get("Width").toString()), Float.parseFloat(shape_json.get("Height").toString()));
 			} else if (shape_json.get("Type").equals("BLOCK_TWO_OBJECTIVE")) {
-				
+				terrain_objectives[1] = new Rectangle(Float.parseFloat(shape_json.get("Min X").toString()), Float.parseFloat(shape_json.get("Min Y").toString()), Float.parseFloat(shape_json.get("Width").toString()), Float.parseFloat(shape_json.get("Height").toString()));
 			}
 		}
 		container.setShowFPS(true);
-		
-		this.blockOneX = 100;
-		this.blockOneY = 100;
-		this.blockTwoX = 0;
-		this.blockTwoY = 0;
+		this.blockOneX = (int)((long)((JSONArray) ((JSONObject) level.get("Starting Coordinates")).get("Block One")).get(0));
+		this.blockOneY = (int)((long)((JSONArray) ((JSONObject) level.get("Starting Coordinates")).get("Block One")).get(1));
+		//this.blockOneX = 100;
+		//this.blockOneY = 100;
+		this.blockTwoX = (int)((long)((JSONArray) ((JSONObject) level.get("Starting Coordinates")).get("Block Two")).get(0));
+		this.blockTwoY = (int)((long)((JSONArray) ((JSONObject) level.get("Starting Coordinates")).get("Block Two")).get(1));
 		//Music backroundMusic = new Music("io/github/podshot/TwoTogether/sound/backround_music.ogg");
 		//backroundMusic.loop(1f, 0.30f);
 		//container.setShowFPS(true);
 		//container.setTargetFrameRate(60);
+		container.setMultiSample(3);
 	}
 
 	@Override
@@ -228,10 +245,25 @@ public class LevelOneState extends BasicGameState {
 		if (container.getInput().isKeyPressed(Input.KEY_R)) {
 			container.reinit();
 		}
+		
+		if (this.blockOneBounds().intersects(terrain_objectives[0])) {
+			this.objectivesCompleted[0] = true;
+		} else {
+			this.objectivesCompleted[0] = false;
+		}
+		if (this.blockTwoBounds().intersects(terrain_objectives[1])) {
+			this.objectivesCompleted[1] = true;
+		} else {
+			this.objectivesCompleted[1] = false;
+		}
 	}
 
 	public ArrayList<Shape> getTerrain() {
 		return terrain_normal;
+	}
+	
+	public static void getAllTerrain() {
+		
 	}
 
 	@Override

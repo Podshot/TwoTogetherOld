@@ -1,5 +1,11 @@
 {
 	"Description": "There's nothing wrong in asking for help",
+	"Starting Coordinates": {
+		"Block One": [100,
+		100],
+		"Block Two": [0,
+		0]
+	},
 	"Shapes": [{
 		"Min X": 0.0,
 		"Height": 74.0,
@@ -62,5 +68,19 @@
 		"Min Y": 404.0,
 		"Width": 30.0,
 		"Type": "BACKGROUND"
+	},
+	{
+		"Min X": 550.0,
+		"Height": 10.0,
+		"Min Y": 0.0,
+		"Width": 10.0,
+		"Type": "BLOCK_ONE_OBJECTIVE"
+	},
+	{
+		"Min X": 0.0,
+		"Height": 20.0,
+		"Min Y": 276.0,
+		"Width": 10.0,
+		"Type": "BLOCK_TWO_OBJECTIVE"
 	}]
 }
