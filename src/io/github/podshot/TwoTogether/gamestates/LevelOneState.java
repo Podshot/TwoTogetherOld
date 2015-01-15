@@ -12,6 +12,7 @@ import org.json.simple.parser.ParseException;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
@@ -34,6 +35,8 @@ public class LevelOneState extends BasicGameState {
 	private float b2verticalSpeed = 0.0f;
 	private float blockTwoX;
 	private float blockTwoY;
+	
+	// Constants
 	
 	private String description;
 	private Color bgcolor;
@@ -58,6 +61,7 @@ public class LevelOneState extends BasicGameState {
 		for (Shape rect : terrain_normal) {
 			g.fill(rect);
 		}
+		g.drawString("FPS: "+container.getFPS(), 50, 30);
 	}
 
 	@Override
@@ -82,16 +86,22 @@ public class LevelOneState extends BasicGameState {
 				terrain_normal.add(rectangle);
 			} else if (shape_json.get("Type").equals("BACKGROUND")) {
 				terrain_background.add(rectangle);
+			} else if (shape_json.get("Type").equals("BLOCK_ONE_OBJECTIVE")) {
+				
+			} else if (shape_json.get("Type").equals("BLOCK_TWO_OBJECTIVE")) {
+				
 			}
 		}
 		container.setShowFPS(true);
 		
 		this.blockOneX = 100;
 		this.blockOneY = 100;
+		this.blockTwoX = 0;
+		this.blockTwoY = 0;
 		//Music backroundMusic = new Music("io/github/podshot/TwoTogether/sound/backround_music.ogg");
 		//backroundMusic.loop(1f, 0.30f);
-		//this.app.setShowFPS(false);
-		//this.app.setTargetFrameRate(60);
+		//container.setShowFPS(true);
+		//container.setTargetFrameRate(60);
 	}
 
 	@Override
@@ -163,13 +173,14 @@ public class LevelOneState extends BasicGameState {
 			if (this.blockTwoIntersectsSomething()) {
 				b2jumping = false;
 				b2verticalSpeed = 0;
+				
 				if (this.blockTwoBounds().intersects(this.blockOneBounds())) {
 					this.blockTwoY = this.blockTwoY - 1.0f;
 					System.out.println("Fired when jumped");
-					System.out.println(this.blockTwoBounds().intersects(this.blockOneBounds()));
 				} else {
 					this.blockTwoY = this.blockTwoY - 1.0f;
 				}
+				
 				//}
 			}
 		} else if (!b1jumping && !b2jumping) {
@@ -194,11 +205,28 @@ public class LevelOneState extends BasicGameState {
 		}
 		// End controlling the big block
 
-		if (this.blockOneCollidedOnBottom()) {
+		if (this.blockOneCollidedOnBottom() && !this.blockOneCollidedOnTop()) {
 			this.blockOneY -= .5f;
 		}
-		if (this.blockOneCollidedOnTop()) {
+		if (this.blockOneCollidedOnTop() && !this.blockOneCollidedOnBottom()) {
 			this.blockOneY += .5f;
+		}
+		
+		if (this.blockTwoCollidedOnBottom() && !this.blockTwoCollidedOnTop()) {
+			this.blockTwoY -= .5f;
+		}
+		if (this.blockTwoCollidedOnTop() && !this.blockTwoCollidedOnBottom()) {
+			this.blockTwoY += .5f;
+		}
+		
+		// Debug logging
+		/*
+		System.out.println("Block One intersects something: "+this.blockOneIntersectsSomething());
+		System.out.println("Block One collided on bottom: "+this.blockOneCollidedOnBottom());
+		System.out.println("Block One collided on top: "+this.blockOneCollidedOnTop());
+		*/
+		if (container.getInput().isKeyPressed(Input.KEY_R)) {
+			container.reinit();
 		}
 	}
 
@@ -256,7 +284,10 @@ public class LevelOneState extends BasicGameState {
 				|| bt_bounds.contains(this.blockOneBounds().getCenterX(), (this.blockOneBounds().getCenterY()-6))
 				|| bt_bounds.contains(this.blockOneBounds().getMaxX(), (this.blockOneBounds().getCenterY()-6)));
 		for (Shape shape : this.getTerrain()) {
-			toReturn = toReturn || this.blockOneBounds().intersects(shape);
+			//toReturn = toReturn || this.blockOneBounds().intersects(shape);
+			toReturn = toReturn || (shape.contains(this.blockOneBounds().getMinX(), (this.blockOneBounds().getCenterY()-6))
+					|| shape.contains(this.blockOneBounds().getCenterX(), (this.blockOneBounds().getCenterY()-6))
+					|| shape.contains(this.blockOneBounds().getMaxX(), (this.blockOneBounds().getCenterY()-6)));
 		}
 		return toReturn;
 	}
@@ -267,8 +298,11 @@ public class LevelOneState extends BasicGameState {
 		toReturn = (bt_bounds.contains(this.blockOneBounds().getMinX(), (this.blockOneBounds().getCenterY()+6))
 				|| bt_bounds.contains(this.blockOneBounds().getCenterX(), (this.blockOneBounds().getCenterY()+6))
 				|| bt_bounds.contains(this.blockOneBounds().getMaxX(), (this.blockOneBounds().getCenterY()+6)));
-		for (Shape rect : this.getTerrain()) {
-			toReturn = toReturn || this.blockOneBounds().intersects(rect);
+		for (Shape shape : this.getTerrain()) {
+			//toReturn = toReturn || this.blockOneBounds().intersects(rect);
+			toReturn = toReturn || (shape.contains(this.blockOneBounds().getMinX(), (this.blockOneBounds().getCenterY()+6))
+					|| shape.contains(this.blockOneBounds().getCenterX(), (this.blockOneBounds().getCenterY()+6))
+					|| shape.contains(this.blockOneBounds().getMaxX(), (this.blockOneBounds().getCenterY()+6)));
 		}
 		return toReturn;
 	}
@@ -317,7 +351,10 @@ public class LevelOneState extends BasicGameState {
 				|| this.blockOneBounds().contains(this.blockTwoBounds().getCenterX(), (this.blockTwoBounds().getCenterY()-11))
 				|| this.blockOneBounds().contains(this.blockTwoBounds().getMaxX(), (this.blockTwoBounds().getCenterY()-11)));
 		for (Shape shape : this.getTerrain()) {
-			toReturn = toReturn || this.blockTwoBounds().intersects(shape);
+			//toReturn = toReturn || this.blockTwoBounds().intersects(shape);
+			toReturn = toReturn || (shape.contains(this.blockTwoBounds().getMinX(), (this.blockTwoBounds().getCenterY()-11))
+					|| shape.contains(this.blockTwoBounds().getCenterX(), (this.blockTwoBounds().getCenterY()-11))
+					|| shape.contains(this.blockTwoBounds().getMaxX(), (this.blockTwoBounds().getCenterY()-11)));
 		}
 		return toReturn;
 	}
@@ -327,6 +364,12 @@ public class LevelOneState extends BasicGameState {
 		toReturn = (this.blockOneBounds().contains(this.blockTwoBounds().getMinX(), (this.blockTwoBounds().getCenterY()+11))
 				|| this.blockOneBounds().contains(this.blockTwoBounds().getCenterX(), (this.blockTwoBounds().getCenterY()+11))
 				|| this.blockOneBounds().contains(this.blockTwoBounds().getMaxX(), (this.blockTwoBounds().getCenterY()+11)));
+		for (Shape shape : this.getTerrain()) {
+			//toReturn = toReturn || this.blockTwoBounds().intersects(shape);
+			toReturn = toReturn || (shape.contains(this.blockTwoBounds().getMinX(), (this.blockTwoBounds().getCenterY()+11))
+					|| shape.contains(this.blockTwoBounds().getCenterX(), (this.blockTwoBounds().getCenterY()+11))
+					|| shape.contains(this.blockTwoBounds().getMaxX(), (this.blockTwoBounds().getCenterY()+11)));
+		}
 		return toReturn;
 	}
 	
