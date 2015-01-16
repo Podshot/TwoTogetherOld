@@ -9,6 +9,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -36,8 +37,9 @@ public class LevelOneState extends BasicGameState {
 	private float blockTwoY;
 	
 	// Constants
-	private final float blockOneGravity = 0.0f;
-	private final float blockTwoGravity = 0.0f;
+	private final float blockOneGravity = .009f;
+	private final float blockTwoGravity = .007f;
+	private final float blockOneDetection = 5;
 	
 	private String description;
 	private Color bgcolor;
@@ -53,19 +55,28 @@ public class LevelOneState extends BasicGameState {
 		for (Shape rect : terrain_background) {
 			g.fill(rect);
 		}
+
+		g.setColor(Color.gray);
+		for (Shape rect : terrain_normal) {
+			g.fill(rect);
+		}
+		
+		g.drawString("FPS: "+container.getFPS(), 50, 30);
+		
+		g.setColor(Color.white);
 		if (objectivesCompleted[0]) {
 			g.setColor(Color.black);
 		}
 		g.fill(terrain_objectives[0]);
 		if (objectivesCompleted[0]) {
-			g.setColor(bgcolor);
+			g.setColor(Color.white);
 		}
 		
 		if (objectivesCompleted[1]) {
 			g.setColor(Color.black);
 		}
 		g.fill(terrain_objectives[1]);
-
+		
 		g.setColor(Color.gray);
 		g.drawString(description, 110, 50);
 		g.setBackground(new Color(204, 204, 204));
@@ -73,12 +84,6 @@ public class LevelOneState extends BasicGameState {
 		g.fillRect(this.blockOneX, this.blockOneY, 10, 10);
 		g.setColor(Color.cyan);
 		g.fillRect(this.blockTwoX, this.blockTwoY, 10, 20);
-
-		g.setColor(Color.gray);
-		for (Shape rect : terrain_normal) {
-			g.fill(rect);
-		}
-		g.drawString("FPS: "+container.getFPS(), 50, 30);
 	}
 
 	@Override
@@ -159,7 +164,7 @@ public class LevelOneState extends BasicGameState {
 				//b1verticalSpeed = 0;
 			}
 			if (b1jumping) {
-				b1verticalSpeed += .009f * delta;
+				b1verticalSpeed += this.blockOneGravity * delta;
 			}
 			float b1speedY = this.blockOneY;
 			b1speedY += b1verticalSpeed;
@@ -183,7 +188,7 @@ public class LevelOneState extends BasicGameState {
 				//b2verticalSpeed = 0;
 			}
 			if (b2jumping) {
-				b2verticalSpeed += .007f * delta;
+				b2verticalSpeed += this.blockTwoGravity * delta;
 			}
 			float b2speedY = this.blockTwoY;
 			b2speedY += b2verticalSpeed;
@@ -258,6 +263,9 @@ public class LevelOneState extends BasicGameState {
 		} else {
 			this.objectivesCompleted[1] = false;
 		}
+		if (objectivesCompleted[0] && objectivesCompleted[1]) {
+			game.enterState(this.getID()+1);
+		}
 	}
 
 	public ArrayList<Shape> getTerrain() {
@@ -314,14 +322,14 @@ public class LevelOneState extends BasicGameState {
 	private boolean blockOneCollidedOnTop() {
 		boolean toReturn = false;
 		Shape bt_bounds = this.blockTwoBounds();
-		toReturn = (bt_bounds.contains(this.blockOneBounds().getMinX(), (this.blockOneBounds().getCenterY()-6))
-				|| bt_bounds.contains(this.blockOneBounds().getCenterX(), (this.blockOneBounds().getCenterY()-6))
-				|| bt_bounds.contains(this.blockOneBounds().getMaxX(), (this.blockOneBounds().getCenterY()-6)));
+		toReturn = (bt_bounds.contains(this.blockOneBounds().getMinX(), (this.blockOneBounds().getCenterY()-this.blockOneDetection))
+				|| bt_bounds.contains(this.blockOneBounds().getCenterX(), (this.blockOneBounds().getCenterY()-this.blockOneDetection))
+				|| bt_bounds.contains(this.blockOneBounds().getMaxX(), (this.blockOneBounds().getCenterY()-this.blockOneDetection)));
 		for (Shape shape : this.getTerrain()) {
 			//toReturn = toReturn || this.blockOneBounds().intersects(shape);
-			toReturn = toReturn || (shape.contains(this.blockOneBounds().getMinX(), (this.blockOneBounds().getCenterY()-6))
-					|| shape.contains(this.blockOneBounds().getCenterX(), (this.blockOneBounds().getCenterY()-6))
-					|| shape.contains(this.blockOneBounds().getMaxX(), (this.blockOneBounds().getCenterY()-6)));
+			toReturn = toReturn || (shape.contains(this.blockOneBounds().getMinX(), (this.blockOneBounds().getCenterY()-this.blockOneDetection))
+					|| shape.contains(this.blockOneBounds().getCenterX(), (this.blockOneBounds().getCenterY()-this.blockOneDetection))
+					|| shape.contains(this.blockOneBounds().getMaxX(), (this.blockOneBounds().getCenterY()-this.blockOneDetection)));
 		}
 		return toReturn;
 	}
@@ -329,14 +337,14 @@ public class LevelOneState extends BasicGameState {
 	private boolean blockOneCollidedOnBottom() {
 		boolean toReturn = false;
 		Shape bt_bounds = this.blockTwoBounds();
-		toReturn = (bt_bounds.contains(this.blockOneBounds().getMinX(), (this.blockOneBounds().getCenterY()+6))
-				|| bt_bounds.contains(this.blockOneBounds().getCenterX(), (this.blockOneBounds().getCenterY()+6))
-				|| bt_bounds.contains(this.blockOneBounds().getMaxX(), (this.blockOneBounds().getCenterY()+6)));
+		toReturn = (bt_bounds.contains(this.blockOneBounds().getMinX(), (this.blockOneBounds().getCenterY()+this.blockOneDetection))
+				|| bt_bounds.contains(this.blockOneBounds().getCenterX(), (this.blockOneBounds().getCenterY()+this.blockOneDetection))
+				|| bt_bounds.contains(this.blockOneBounds().getMaxX(), (this.blockOneBounds().getCenterY()+this.blockOneDetection)));
 		for (Shape shape : this.getTerrain()) {
 			//toReturn = toReturn || this.blockOneBounds().intersects(rect);
-			toReturn = toReturn || (shape.contains(this.blockOneBounds().getMinX(), (this.blockOneBounds().getCenterY()+6))
-					|| shape.contains(this.blockOneBounds().getCenterX(), (this.blockOneBounds().getCenterY()+6))
-					|| shape.contains(this.blockOneBounds().getMaxX(), (this.blockOneBounds().getCenterY()+6)));
+			toReturn = toReturn || (shape.contains(this.blockOneBounds().getMinX(), (this.blockOneBounds().getCenterY()+this.blockOneDetection))
+					|| shape.contains(this.blockOneBounds().getCenterX(), (this.blockOneBounds().getCenterY()+this.blockOneDetection))
+					|| shape.contains(this.blockOneBounds().getMaxX(), (this.blockOneBounds().getCenterY()+this.blockOneDetection)));
 		}
 		return toReturn;
 	}
